@@ -71,7 +71,7 @@ extension FileSystemObject {
 
 }
 
-// 📁 💾 📝
+// TODO: put fun graphics on the printout: 📁 💾 📝
 let printout = """
 Macintosh HD
   Applications
