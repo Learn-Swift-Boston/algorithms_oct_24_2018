@@ -56,12 +56,12 @@ extension FileSystemObject {
     func pathOfFirstFile(named fileName: String, parent: String? = nil) -> String? {
         switch self {
         case .file(let name, _) where name == fileName: // base case
-            return name
+            return [parent, name].compactMap { $0 }.joined(separator: "/")
         case .file: // was not equal
             return nil
         case .folder(let name, let children):
             if let found = children.lazy.compactMap({ $0.pathOfFirstFile(named: fileName, parent: name) }).first {
-                return [parent, name, found].compactMap { $0 }.joined(separator: "/")
+                return [parent, found].compactMap { $0 }.joined(separator: "/")
             }
             else {
                 return nil
@@ -90,10 +90,6 @@ Macintosh HD
           tutorial 3.txt
 """
 
-print(root.listEverything())
 assert(printout == root.listEverything())
-
-print(root.pathOfFirstFile(named: "tutorial 2.txt"))
-root.pathOfFirstFile(named: "tutorial 2.txt")
-//assert(root.pathOfFirstFile(named: "tutorial 2.txt") == "Macintosh HD/Users/igeek/Downloads/tutorial/tutorial 2.txt")
+assert(root.pathOfFirstFile(named: "tutorial 2.txt") == "Macintosh HD/Users/igeek/Downloads/tutorial/tutorial 2.txt")
 assert(root.pathOfFirstFile(named: "foo bar baz qux") == nil)
